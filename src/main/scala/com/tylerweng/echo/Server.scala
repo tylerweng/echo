@@ -1,16 +1,17 @@
 package com.tylerweng.echo
 
-import com.twitter.finagle.{Http, Service}
-import com.twitter.finagle.http
-import com.twitter.util.{Await, Future}
+import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.{HttpServer, Tls}
 
-object Server extends App {
-  val service = new Service[http.Request, http.Response] {
-    def apply(req: http.Request): Future[http.Response] =
-      Future.value(
-        http.Response(req.version, http.Status.Ok)
-      )
+object ServerMain extends Server
+
+class Server extends HttpServer {
+
+  override val defaultHttpPort: String = ":8080"
+  override val defaultHttpsPort: String = "" // disable the default HTTPS port
+
+  override def configureHttp(router: HttpRouter): Unit = {
+    router
+      .add[ExampleController]
   }
-  val server = Http.serve(":8080", service)
-  Await.ready(server)
 }
