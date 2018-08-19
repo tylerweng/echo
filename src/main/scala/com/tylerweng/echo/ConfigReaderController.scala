@@ -5,8 +5,8 @@ import com.twitter.finatra.http.Controller
 import javax.inject.Singleton
 
 @Singleton
-class ExampleController extends Controller {
-  get("/hello") { request: Request =>
-    "<h1>Hello, world!</h1>"
+class ConfigReaderController extends Controller with ServerConfiguration {
+  get("/config") { _: Request =>
+    config.toString
   }
 }
